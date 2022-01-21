@@ -20,9 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 public class ClasspathLibrariesParser {
     private static final List<String> ALLOWED_KINDS = Arrays.asList("lib", "con");
     private static final SAXParserFactory PARSER_FACTORY = ClasspathLibrariesParser.createParserFactory();
-    
+
     private static SAXParserFactory createParserFactory() {
-    	final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         parserFactory.setNamespaceAware(true);
         return parserFactory;
     }
