@@ -1,31 +1,13 @@
-package es.ibm.stratus.cloudready.parsers.java;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-
-import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 public class ClasspathLibrariesParser {
     private static final List<String> ALLOWED_KINDS = Arrays.asList("lib", "con");
-    
+
     public Set<String> parseClasspathFile() {
-    	final File file = new File("./.classpath");
-    	final Set<String> paths = this.parseClasspathFile(file);
-    	return paths;
+        final File file = new File("./.classpath");
+        final Set<String> paths = this.parseClasspathFile(file);
+        return paths;
     }
-    
+
     public Set<String> parseClasspathFile(final File file) {
         try {
             final Set<String> paths = new TreeSet<>();
@@ -53,7 +35,7 @@ public class ClasspathLibrariesParser {
                 }
 
                 for (int i = 0; i < atts.getLength(); i++) {
-                    log.debug("processing classpathentry with attributes {} - {} -> {}", i, atts.getLocalName(i), atts.getValue(i));
+                    log.debug("read classpathentry attributes [{}] {} -> {}", i, atts.getLocalName(i), atts.getValue(i));
                 }
 
                 final String kind = atts.getValue("kind");
