@@ -1,4 +1,4 @@
-package com.mycompany.exampleproject;
+package com.mycompany.exampleproject.parsers;
 
 import java.io.File;
 import java.util.Arrays;
