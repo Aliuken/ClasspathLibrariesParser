@@ -1,6 +1,31 @@
+package com.mycompany.exampleproject;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 public class ClasspathLibrariesParser {
     private static final List<String> ALLOWED_KINDS = Arrays.asList("lib", "con");
+    private static final SAXParserFactory PARSER_FACTORY = ClasspathLibrariesParser.createParserFactory();
+    
+    private static SAXParserFactory createParserFactory() {
+    	final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        parserFactory.setNamespaceAware(true);
+        return parserFactory;
+    }
 
     public Set<String> parseClasspathFile() {
         final File file = new File("./.classpath");
@@ -22,10 +47,7 @@ public class ClasspathLibrariesParser {
 
     private XMLReader createClasspathFileParser(final Set<String> paths)
             throws SAXException, ParserConfigurationException {
-        final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-        parserFactory.setNamespaceAware(true);
-
-        final XMLReader parser = parserFactory.newSAXParser().getXMLReader();
+        final XMLReader parser = PARSER_FACTORY.newSAXParser().getXMLReader();
         parser.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qname,
