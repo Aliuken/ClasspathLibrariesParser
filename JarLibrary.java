@@ -26,7 +26,7 @@ public final class JarLibrary implements Serializable, Comparable<JarLibrary> {
     private final String version;
 
     @NonNull
-    private final String path;
+    private final String filePath;
 
     @Override
     public int compareTo(final JarLibrary other) {
