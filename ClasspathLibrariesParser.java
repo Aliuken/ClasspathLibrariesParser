@@ -24,7 +24,7 @@ public class ClasspathLibrariesParser {
     private static final List<String> ALLOWED_KINDS = Arrays.asList("lib", "con");
     private static final SAXParserFactory PARSER_FACTORY = ClasspathLibrariesParser.createParserFactory();
     private static final String JAR_EXTENSION = ".jar";
-    private static final int JAR_EXTENSION_LENGTH = JAR_FILE_EXTENSION.length();
+    private static final int JAR_EXTENSION_LENGTH = JAR_EXTENSION.length();
     private static final Pattern VERSION_BEGINNING_PATTERN = Pattern.compile("-[0-9]");
 
     private static SAXParserFactory createParserFactory() {
