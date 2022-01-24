@@ -1,4 +1,4 @@
-package com.mycompany.exampleproject.parsers;
+package com.mycompany.exampleproject.parsers.output;
 
 import java.io.Serializable;
 
