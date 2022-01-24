@@ -15,8 +15,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-import es.ibm.stratus.cloudready.parsers.jar.JarLibrary;
-import es.ibm.stratus.cloudready.utils.PatternUtils;
+import com.mycompany.exampleproject.parsers.JarLibrary;
+import com.mycompany.exampleproject.utils.PatternUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
