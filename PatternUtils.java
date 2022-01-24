@@ -3,7 +3,6 @@ package com.mycompany.exampleproject.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.experimental.UtilityClass;
