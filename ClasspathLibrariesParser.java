@@ -15,7 +15,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.mycompany.exampleproject.parsers.JarLibrary;
+import com.mycompany.exampleproject.parsers.output.JarLibrary;
 import com.mycompany.exampleproject.utils.PatternUtils;
 import lombok.extern.slf4j.Slf4j;
 
