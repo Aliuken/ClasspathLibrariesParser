@@ -45,7 +45,7 @@ public class ClasspathLibrariesParser {
             parser.parse(file.toURI().toURL().toString());
             if (jarLibraries != null) {
                 for (JarLibrary jarLibrary : jarLibraries) {
-                    log.debug("Classpath file path: {}", jarLibrary);
+                    log.debug("Classpath file path found: {}", jarLibrary);
                 }
             }
             return jarLibraries;
