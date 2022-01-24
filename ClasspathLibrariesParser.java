@@ -87,7 +87,7 @@ public class ClasspathLibrariesParser {
                     final String fileName = file.getName();
                     final String filePath = file.getPath();
                     if (fileName != null && filePath != null) {
-                        jarLibrary = this.getJarLibraryFromFileName(fileName, filePath);
+                        jarLibrary = this.getJarLibraryFromFileData(fileName, filePath);
                     } else {
                         jarLibrary = null;
                     }
@@ -98,7 +98,7 @@ public class ClasspathLibrariesParser {
                 return jarLibrary;
             }
 
-            private JarLibrary getJarLibraryFromFileName(final String fileName, final String path) {
+            private JarLibrary getJarLibraryFromFileData(final String fileName, final String filePath) {
                 final String fileNameWithoutExtension;
                 if (fileName.toLowerCase().endsWith(JAR_FILE_EXTENSION)) {
                     fileNameWithoutExtension = fileName.substring(0, fileName.length() - JAR_FILE_EXTENSION.length());
@@ -113,11 +113,11 @@ public class ClasspathLibrariesParser {
                 if (versionSeparatorPosition >= 0) {
                     final String name = fileNameWithoutExtension.substring(0, versionSeparatorPosition);
                     final String version = fileNameWithoutExtension.substring(versionSeparatorPosition + 1);
-                    jarLibrary = new JarLibrary(fileName, name, version, path);
+                    jarLibrary = new JarLibrary(fileName, name, version, filePath);
                 } else {
                     final String name = fileNameWithoutExtension;
                     final String version = null;
-                    jarLibrary = new JarLibrary(fileName, name, version, path);
+                    jarLibrary = new JarLibrary(fileName, name, version, filePath);
                 }
 
                 return jarLibrary;
