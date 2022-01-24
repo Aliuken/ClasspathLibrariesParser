@@ -23,8 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ClasspathLibrariesParser {
     private static final List<String> ALLOWED_KINDS = Arrays.asList("lib", "con");
     private static final SAXParserFactory PARSER_FACTORY = ClasspathLibrariesParser.createParserFactory();
-    private static final String JAR_FILE_EXTENSION = ".jar";
-    private static final int JAR_FILE_EXTENSION_LENGTH = JAR_FILE_EXTENSION.length();
+    private static final String JAR_EXTENSION = ".jar";
+    private static final int JAR_EXTENSION_LENGTH = JAR_FILE_EXTENSION.length();
     private static final Pattern VERSION_BEGINNING_PATTERN = Pattern.compile("-[0-9]");
 
     private static SAXParserFactory createParserFactory() {
@@ -99,8 +99,8 @@ public class ClasspathLibrariesParser {
                 final JarLibrary jarLibrary;
                 if (fileName != null && filePath != null) {
                     final String fileNameWithoutExtension;
-                    if (fileName.toLowerCase().endsWith(JAR_FILE_EXTENSION)) {
-                        fileNameWithoutExtension = fileName.substring(0, fileName.length() - JAR_FILE_EXTENSION_LENGTH);
+                    if (fileName.toLowerCase().endsWith(JAR_EXTENSION)) {
+                        fileNameWithoutExtension = fileName.substring(0, fileName.length() - JAR_EXTENSION_LENGTH);
                     } else {
                         fileNameWithoutExtension = fileName;
                     }
