@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
@@ -14,12 +15,16 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import es.ibm.stratus.cloudready.parsers.jar.JarLibrary;
+import es.ibm.stratus.cloudready.utils.PatternUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ClasspathLibrariesParser {
     private static final List<String> ALLOWED_KINDS = Arrays.asList("lib", "con");
     private static final SAXParserFactory PARSER_FACTORY = ClasspathLibrariesParser.createParserFactory();
+    private static final String JAR_FILE_EXTENSION = ".jar";
+    private static final Pattern VERSION_BEGINNING_PATTERN = Pattern.compile("-[0-9]");
 
     private static SAXParserFactory createParserFactory() {
         final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
@@ -27,25 +32,30 @@ public class ClasspathLibrariesParser {
         return parserFactory;
     }
 
-    public Set<String> parseClasspathFile() {
+    public Set<JarLibrary> parseClasspathFile() {
         final File file = new File("./.classpath");
-        final Set<String> paths = this.parseClasspathFile(file);
+        final Set<JarLibrary> paths = this.parseClasspathFile(file);
         return paths;
     }
 
-    public Set<String> parseClasspathFile(final File file) {
+    public Set<JarLibrary> parseClasspathFile(final File file) {
         try {
-            final Set<String> paths = new TreeSet<>();
-            final XMLReader parser = this.createClasspathFileParser(paths);
+            final Set<JarLibrary> jarLibraries = new TreeSet<>();
+            final XMLReader parser = this.createClasspathFileParser(jarLibraries);
             parser.parse(file.toURI().toURL().toString());
-            return paths;
+            if (jarLibraries != null) {
+                for (JarLibrary jarLibrary : jarLibraries) {
+                    log.debug("Classpath file path: {}", jarLibrary);
+                }
+            }
+            return jarLibraries;
         } catch (Exception e) {
             log.error("An error happened while parsing the classpath file \"{}\". Exception: {}", file, e.getMessage());
             return null;
         }
     }
 
-    private XMLReader createClasspathFileParser(final Set<String> paths)
+    private XMLReader createClasspathFileParser(final Set<JarLibrary> jarLibraries)
             throws SAXException, ParserConfigurationException {
         final XMLReader parser = PARSER_FACTORY.newSAXParser().getXMLReader();
         parser.setContentHandler(new DefaultHandler() {
@@ -63,8 +73,54 @@ public class ClasspathLibrariesParser {
                 final String kind = atts.getValue("kind");
                 if (kind != null && ALLOWED_KINDS.contains(kind)) {
                     final String path = atts.getValue("path");
-                    paths.add(path);
+                    final JarLibrary jarLibrary = this.getJarLibraryFromPath(path);
+                    if (jarLibrary != null) {
+                        jarLibraries.add(jarLibrary);
+                    }
                 }
+            }
+
+            private JarLibrary getJarLibraryFromPath(final String path) {
+                final JarLibrary jarLibrary;
+                if (path != null) {
+                    final File file = new File(path);
+                    final String fileName = file.getName();
+                    final String filePath = file.getPath();
+                    if (fileName != null && filePath != null) {
+                        jarLibrary = this.getJarLibraryFromFileName(fileName, filePath);
+                    } else {
+                        jarLibrary = null;
+                    }
+                } else {
+                    jarLibrary = null;
+                }
+
+                return jarLibrary;
+            }
+
+            private JarLibrary getJarLibraryFromFileName(final String fileName, final String path) {
+                final String fileNameWithoutExtension;
+                if (fileName.toLowerCase().endsWith(JAR_FILE_EXTENSION)) {
+                    fileNameWithoutExtension = fileName.substring(0, fileName.length() - JAR_FILE_EXTENSION.length());
+                } else {
+                    fileNameWithoutExtension = fileName;
+                }
+
+                final int versionSeparatorPosition = PatternUtils.getFirstMatchingPosition(
+                        fileNameWithoutExtension, VERSION_BEGINNING_PATTERN);
+
+                final JarLibrary jarLibrary;
+                if (versionSeparatorPosition >= 0) {
+                    final String name = fileNameWithoutExtension.substring(0, versionSeparatorPosition);
+                    final String version = fileNameWithoutExtension.substring(versionSeparatorPosition + 1);
+                    jarLibrary = new JarLibrary(fileName, name, version, path);
+                } else {
+                    final String name = fileNameWithoutExtension;
+                    final String version = null;
+                    jarLibrary = new JarLibrary(fileName, name, version, path);
+                }
+
+                return jarLibrary;
             }
         });
 
