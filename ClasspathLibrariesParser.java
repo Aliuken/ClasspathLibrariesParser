@@ -35,8 +35,8 @@ public class ClasspathLibrariesParser {
 
     public Set<JarLibrary> parseClasspathFile() {
         final File file = new File("./.classpath");
-        final Set<JarLibrary> paths = this.parseClasspathFile(file);
-        return paths;
+        final Set<JarLibrary> jarLibraries = this.parseClasspathFile(file);
+        return jarLibraries;
     }
 
     public Set<JarLibrary> parseClasspathFile(final File file) {
@@ -44,11 +44,13 @@ public class ClasspathLibrariesParser {
             final Set<JarLibrary> jarLibraries = new TreeSet<>();
             final XMLReader parser = this.createClasspathFileParser(jarLibraries);
             parser.parse(file.toURI().toURL().toString());
+
             if (jarLibraries != null) {
                 for (JarLibrary jarLibrary : jarLibraries) {
                     log.debug("Classpath file path found: {}", jarLibrary);
                 }
             }
+
             return jarLibraries;
         } catch (Exception e) {
             log.error("An error happened while parsing the classpath file \"{}\". Exception: {}", file, e.getMessage());
