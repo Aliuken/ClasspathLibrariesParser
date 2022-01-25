@@ -65,7 +65,7 @@ public class ClasspathLibrariesParser {
             @Override
             public void startElement(final String uri, final String localName, final String qname,
                     final Attributes atts) {
-                if (!"classpathentry".equals(localName)) {
+                if (!"classpathentry".equals(localName) || atts == null) {
                     return;
                 }
 
