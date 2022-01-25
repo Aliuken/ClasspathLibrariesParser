@@ -107,7 +107,7 @@ public class ClasspathLibrariesParser {
                         fileNameWithoutExtension = fileName;
                     }
 
-                    final int versionSeparatorPosition = PatternUtils.getFirstMatchingPosition(
+                    final int versionSeparatorPosition = PatternUtils.getLastMatchingPosition(
                             fileNameWithoutExtension, VERSION_BEGINNING_PATTERN);
 
                     final String name;
